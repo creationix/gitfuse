@@ -1,7 +1,7 @@
 {
   "name": "gitfuse",
-  "version": "0.0.0",
-  "description": "git-fuse ===========",
+  "version": "0.1.0",
+  "description": "Mount js-git repos as userspace filesystems using fuse4js",
   "bin": {"gitfuse": "./gitfuse.js"},
   "repository": {
     "type": "git",
