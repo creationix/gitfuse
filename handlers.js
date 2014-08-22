@@ -21,6 +21,8 @@ module.exports = function(repo) {
   var commitHash;
   var treeHash;
 
+  var lengthCache = {};
+
   return {
     init: init,
     statfs: statfs,
@@ -79,7 +81,15 @@ module.exports = function(repo) {
       }
 
       var mode = entry.mode;
-      if (modes.isBlob(mode)) return repo.loadAs('blob', entry.hash, onBlob);
+      if (modes.isBlob(mode)) {
+        if (entry.hash in lengthCache) {
+          return callback(0, {
+            size: lengthCache[entry.hash],
+            mode: entry.mode
+          });
+        }
+        return repo.loadAs('blob', entry.hash, onBlob);
+      }
 
       if (mode === modes.tree) {
         return callback(0, {
@@ -91,6 +101,7 @@ module.exports = function(repo) {
 
       function onBlob(err, blob) {
         if (err) return (-ENOENT);
+        lengthCache[entry.hash] = blob.length;
         return callback(0, {
           size: blob.length,
           mode: entry.mode
@@ -101,14 +112,14 @@ module.exports = function(repo) {
 
   function readdir(path, callback) {
     repo.pathToEntry(treeHash, path, onEntry);
-    
+
     function onEntry(err, entry) {
       if (err) return callback(-1);
       if (!entry || !entry.mode) return callback(-ENOENT);
       if (entry.mode !== modes.tree) return callback(-EINVAL);
       repo.loadAs("tree", entry.hash, onTree);
     }
-    
+
     function onTree(err, tree) {
       if (err) return callback(-1);
       if (!tree) return callback(-ENOENT);
