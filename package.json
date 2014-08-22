@@ -1,0 +1,20 @@
+{
+  "name": "git-fuse4js",
+  "version": "0.0.0",
+  "description": "git-fuse4js ===========",
+  "main": "handlers.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/creationix/git-fuse4js"
+  },
+  "author": "Tim Caswell <tim@creationix.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/creationix/git-fuse4js/issues"
+  },
+  "homepage": "https://github.com/creationix/git-fuse4js"
+}
