@@ -58,7 +58,7 @@ require('js-git/mixins/path-to-entry')(repo);
 require('js-git/mixins/read-combiner')(repo);
 require('js-git/mixins/formats')(repo);
 
-var handlers = require('./handlers')(repo);
+var handlers = require('./handlers')(repo, argv);
 
 var fuseOptions = [];
 if (argv.fuseoptions) {

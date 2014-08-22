@@ -17,7 +17,7 @@ var fakeStats = {
 var ENOENT = 2;
 var EINVAL = 22;
 
-module.exports = function(repo) {
+module.exports = function(repo, argv) {
   var commitHash;
   var treeHash;
 
@@ -64,7 +64,7 @@ module.exports = function(repo) {
       }
       treeHash = commit.tree;
       if (callback) {
-        setInterval(init, 1000);
+        setInterval(init, argv.github ? 30000 : 500);
         callback();
       }
     }
