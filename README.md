@@ -8,20 +8,29 @@ A CLI tool that mounts [js-git][] repos as local filesystems using [fuse4js][].
 Mounting a local bare git repo.
 
 ```sh
-> git clone --bare git@github.com:creationix/conquest.git # Create a local bare repo by cloning a remote
-> mkdir conquest # Create a mountpoint
-> gitfuse -p conquest.git -m conquest -o allow_other,auto_umount # mount with some custom fuse options
+# Create a local bare repo by cloning a remote
+> git clone --bare git@github.com:creationix/conquest.git
+# Create a mountpoint
+> mkdir conquest
+# mount with some custom fuse options
+# the `auto_umount` option is linux only.
+> gitfuse -p conquest.git -m conquest -o allow_other,auto_umount
 ```
 
 Mounting a remote github repo using Github's REST API.  Create a token at <https://github.com/settings/tokens/new>.
 
 ```sh
-> export GITHUB_TOKEN=a19e1bbf332ef7937a54c5f3de47b2813b27be42 # Paste in your own token
-> mkdir exploder # Create a mountpoint
-> gitfuse -g creationix/exploder -p exploder -o allow_other,auto_umount # mount with custom options
+# Paste in your own token
+> export GITHUB_TOKEN=a19e1bbf332ef7937a54c5f3de47b2813b27be42
+# Create a mountpoint
+> mkdir exploder
+# Mount it!
+> gitfuse -g creationix/exploder -p exploder -o allow_other
 ```
 
 In either example, the fuse command blocks the terminal, so either background with `&` or open a new terminal tab to test the mount.
+
+To umount either use `sudo umount /path/to/mountpoint` or use `fusermount -u /path/to/mountpoint`.
 
 ## Setup
 
