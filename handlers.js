@@ -163,7 +163,6 @@ module.exports = function(repo) {
   }
 
   function statfs(cb) {
-    console.log("STATFS");
     cb(0, fakeStats);
   }
 
