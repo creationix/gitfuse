@@ -76,9 +76,10 @@ Currently this only mounts the git repo read-only.  In the future it will allow 
 
 ## About
 
-This was a Rackspace hackday project by @creationix and @stufflebear.
+This was a Rackspace [hackday project][] by @creationix and @stufflebear.
 
 [js-git]: https://github.com/creationix/js-git
 [fuse4js]: https://github.com/bcle/fuse4js
 [V8 bug]: https://github.com/joyent/node/pull/8224
 [nvm]: https://github.com/creationix/nvm.git
+[hackday project]: http://prezi.com/tmd0ycju3lui/gitfuse-overnight/
