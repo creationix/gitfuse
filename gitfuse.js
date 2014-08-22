@@ -62,7 +62,7 @@ var handlers = require('./handlers')(repo, argv);
 
 var fuseOptions = [];
 if (argv.fuseoptions) {
-  agrv.fuseOptions.split(',').forEach(function(option) {
+  argv.fuseoptions.split(',').forEach(function(option) {
     fuseOptions.push('-o', option);
   });
 }
