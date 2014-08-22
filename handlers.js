@@ -23,8 +23,9 @@ module.exports = function(repo) {
 
   return {
     init: init,
+    statfs: statfs,
     getattr: getattr,
-    // readdir: readdir,
+    readdir: readdir,
     // open: open,
     // read: read,
     // write: write,
@@ -36,11 +37,10 @@ module.exports = function(repo) {
     // rmdir: rmdir,
     // destroy: destroy,
     // setxattr: setxattr,
-    // statfs: statfs,
   };
 
   function init(callback) {
-    if (callback) console.log("INIT");
+    console.log("INIT");
     repo.readRef('refs/heads/master', onRef);
 
     function onRef(err, hash) {
@@ -151,6 +151,7 @@ module.exports = function(repo) {
   }
 
   function statfs(cb) {
+    console.log("STATFS");
     cb(0, fakeStats);
   }
 
