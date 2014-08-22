@@ -24,6 +24,10 @@ var argv = optimist
     alias: 'fuseoptions',
     desc: 'comma seperated fuse options (eg "allow_other,auto_unmount")'
   })
+  .options('r', {
+    alias: 'ref',
+    desc: 'Specify a custom ref to mount (defaults to "refs/heads/master")'
+  })
   .options('d', {
     alias: 'debug',
     desc: 'enable debug for fuse4js'

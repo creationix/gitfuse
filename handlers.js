@@ -20,6 +20,7 @@ var EINVAL = 22;
 module.exports = function(repo, argv) {
   var commitHash;
   var treeHash;
+  var ref = argv.r || "refs/heads/master";
 
   var lengthCache = {};
 
@@ -42,7 +43,7 @@ module.exports = function(repo, argv) {
   };
 
   function init(callback) {
-    repo.readRef('refs/heads/master', onRef);
+    repo.readRef(ref, onRef);
 
     function onRef(err, hash) {
       if (err) {
