@@ -1,18 +1,22 @@
 {
-  "name": "git-fuse4js",
+  "name": "gitfuse",
   "version": "0.0.0",
-  "description": "git-fuse4js ===========",
-  "bin": {"gitfs": "./gitfs.js"},
+  "description": "git-fuse ===========",
+  "bin": {"gitfuse": "./gitfuse.js"},
   "repository": {
     "type": "git",
-    "url": "git://github.com/creationix/git-fuse4js"
+    "url": "git://github.com/creationix/gitfuse"
   },
+  "contributors": [
+    {"name": "Tim Caswell", "email": "tim@creationix.com"},
+    {"name": "Mary Stufflebeam", "email": "marystufflebeam@gmail.com"}
+  ],
   "author": "Tim Caswell <tim@creationix.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creationix/git-fuse4js/issues"
+    "url": "https://github.com/creationix/gitfuse/issues"
   },
-  "homepage": "https://github.com/creationix/git-fuse4js",
+  "homepage": "https://github.com/creationix/gitfuse",
   "dependencies": {
     "fuse4js": "^0.1.9",
     "git-node-fs": "^1.0.0",
