@@ -123,17 +123,41 @@ module.exports = function(repo) {
     function onTree(err, tree) {
       if (err) return callback(-1);
       if (!tree) return callback(-ENOENT);
-      var names = Object.keys(tree);
+      var names = Object.keys(tree).filter(function (name) {
+        return tree[name].mode !== modes.commit;
+      });
       return callback(0, names);
     }
   }
 
   function open(path, flags, callback) {
-    console.log("TODO: Implement open", arguments);
+    console.log("OPEN", path);
+    repo.pathToEntry(treeHash, path, onEntry);
+
+    function onEntry(err, entry) {
+      if (err) return callback(-1);
+      if (!entry || !entry.mode) return callback(-ENOENT);
+      return callback(0);
+    }
   }
 
-  function read() {
-    console.log("TODO: Implement read", arguments);
+  function read(path, offset, len, buf, fd, callback) {
+    console.log("READ", path, offset, len);
+    repo.pathToEntry(treeHash, path, onEntry);
+
+    function onEntry(err, entry) {
+      if (err) return callback(-1);
+      if (!entry || !entry.mode) return callback(-ENOENT);
+      if (!modes.isBlob(entry.mode)) return callback(-EINVAL);
+      repo.loadAs("blob", entry.hash, onBlob);
+    }
+
+    function onBlob(err, blob) {
+      if (err) return callback(-1);
+      var length = Math.max(len, blob.length);
+      blob.copy(buf, 0, offset, length);
+      callback(length);
+    }
   }
 
   function write() {
