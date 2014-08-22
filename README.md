@@ -78,8 +78,6 @@ Currently this only mounts the git repo read-only.  In the future it will allow 
 
 This was a Rackspace hackday project by @creationix and @stufflebear.
 
-A git backend for fuse4js using js-git
-
 [js-git]: https://github.com/creationix/js-git
 [fuse4js]: https://github.com/bcle/fuse4js
 [V8 bug]: https://github.com/joyent/node/pull/8224
