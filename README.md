@@ -51,6 +51,23 @@ Once you have the fuse headers and userspace tools (`fusermount`) installed, you
 
 Then have fun!
 
+## Usage
+
+```
+> gitfuse
+
+Mount a git repo as a file system
+
+Usage: node ./gitfuse.js {options}
+
+Options:
+  -p, --path         path to local git bare repository (eg ./repo.git)                                                                                
+  -g, --github       github repository (eg creationix/exploder)                                                                                       
+  -m, --mountpoint   path to mount at                                                                                                                 
+  -o, --fuseoptions  comma seperated fuse options (eg "allow_other,auto_unmount")                                                                     
+  -d, --debug        enable debug for fuse4js                                                                                                         
+```
+
 ## TODO
 
 Currently this only mounts the git repo read-only.  In the future it will allow also writing to the repo and creating new commits.
