@@ -26,21 +26,20 @@ module.exports = function(repo) {
     statfs: statfs,
     getattr: getattr,
     readdir: readdir,
-    // open: open,
-    // read: read,
-    // write: write,
-    // release: release,
-    // create: create,
-    // unlink: unlink,
-    // rename: rename,
-    // mkdir: mkdir,
-    // rmdir: rmdir,
-    // destroy: destroy,
-    // setxattr: setxattr,
+    open: open,
+    read: read,
+    write: write,
+    release: release,
+    create: create,
+    unlink: unlink,
+    rename: rename,
+    mkdir: mkdir,
+    rmdir: rmdir,
+    destroy: destroy,
+    setxattr: setxattr,
   };
 
   function init(callback) {
-    console.log("INIT");
     repo.readRef('refs/heads/master', onRef);
 
     function onRef(err, hash) {
@@ -56,12 +55,12 @@ module.exports = function(repo) {
       repo.loadAs('commit', commitHash, onCommit);
     }
 
-    function onCommit(err, hash) {
+    function onCommit(err, commit) {
       if (err) {
         if (!callback) throw err;
         return callback(err);
       }
-      treeHash = hash;
+      treeHash = commit.tree;
       if (callback) {
         setInterval(init, 1000);
         callback();
@@ -70,7 +69,6 @@ module.exports = function(repo) {
   }
 
   function getattr(path, callback) {
-    console.log("GETATTR", path);
 
     repo.pathToEntry(treeHash, path, onEntry);
 
@@ -101,11 +99,25 @@ module.exports = function(repo) {
     }
   }
 
-  function readdir() {
-    console.log("TODO: Implement readdir", arguments);
+  function readdir(path, callback) {
+    repo.pathToEntry(treeHash, path, onEntry);
+    
+    function onEntry(err, entry) {
+      if (err) return callback(-1);
+      if (!entry || !entry.mode) return callback(-ENOENT);
+      if (entry.mode !== modes.tree) return callback(-EINVAL);
+      repo.loadAs("tree", entry.hash, onTree);
+    }
+    
+    function onTree(err, tree) {
+      if (err) return callback(-1);
+      if (!tree) return callback(-ENOENT);
+      var names = Object.keys(tree);
+      return callback(0, names);
+    }
   }
 
-  function open() {
+  function open(path, flags, callback) {
     console.log("TODO: Implement open", arguments);
   }
 
