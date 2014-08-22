@@ -2,7 +2,8 @@ var pathJoin = require('path').join;
 var fuse = require('fuse4js');
 
 var repo = {};
-var path = pathJoin(__dirname, 'ele.git');
+var path = pathJoin(process.cwd(), process.argv[2]);
+console.log("Mounting %s", path);
 
 require('git-node-fs/mixins/fs-db')(repo, path);
 require('js-git/mixins/path-to-entry')(repo);
@@ -49,6 +50,6 @@ function readFile(treeHash, path, callback) {
 }*/
 
 
-fuse.start('/tmp/tutorial/mnt', handlers, true, ['-o', 'allow_other']);
+fuse.start('/tmp/tutorial/mnt', handlers, true, ['-o', 'allow_other', '-o', 'auto_unmount']);
 
 console.log(repo);

@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/creationix/git-fuse4js/issues"
   },
-  "homepage": "https://github.com/creationix/git-fuse4js"
+  "homepage": "https://github.com/creationix/git-fuse4js",
+  "dependencies": {
+    "fuse4js": "^0.1.9",
+    "git-node-fs": "^0.1.0",
+    "js-git": "^0.7.7"
+  }
 }
