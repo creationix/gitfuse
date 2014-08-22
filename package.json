@@ -2,11 +2,7 @@
   "name": "git-fuse4js",
   "version": "0.0.0",
   "description": "git-fuse4js ===========",
-  "main": "handlers.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
+  "bin": {"gitfs": "./gitfs.js"},
   "repository": {
     "type": "git",
     "url": "git://github.com/creationix/git-fuse4js"
@@ -21,6 +17,7 @@
     "fuse4js": "^0.1.9",
     "git-node-fs": "^1.0.0",
     "js-git": "^0.7.7",
-    "js-github": "^1.0.0"
+    "js-github": "^1.0.0",
+    "optimist": "^0.6.1"
   }
 }

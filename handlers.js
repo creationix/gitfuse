@@ -85,7 +85,7 @@ module.exports = function(repo) {
         if (entry.hash in lengthCache) {
           return callback(0, {
             size: lengthCache[entry.hash],
-            mode: entry.mode
+            mode: entry.mode & 0777555
           });
         }
         return repo.loadAs('blob', entry.hash, onBlob);
@@ -94,7 +94,7 @@ module.exports = function(repo) {
       if (mode === modes.tree) {
         return callback(0, {
           size: 4096,  // standard size of a directory
-          mode: 040755 //directory with 755 permissions
+          mode: 040555 //directory with 755 permissions
         });
       }
       return callback(-EINVAL);
@@ -104,7 +104,7 @@ module.exports = function(repo) {
         lengthCache[entry.hash] = blob.length;
         return callback(0, {
           size: blob.length,
-          mode: entry.mode
+          mode: entry.mode & 0777555
         });
       }
     }
@@ -164,8 +164,8 @@ module.exports = function(repo) {
     console.log("TODO: Implement write", arguments);
   }
 
-  function release() {
-    console.log("TODO: Implement release", arguments);
+  function release(path, fd, callback) {
+    callback(0);
   }
 
   function create() {

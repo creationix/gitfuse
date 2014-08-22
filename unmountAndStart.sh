@@ -1,4 +1,4 @@
 #!/bin/sh
 
-sudo umount /tmp/tutorial/mnt/; node server.js $1
+sudo umount /tmp/tutorial/mnt/; gitfs "$@"
 
