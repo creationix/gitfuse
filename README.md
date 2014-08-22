@@ -53,8 +53,8 @@ Then have fun!
 
 ## Usage
 
-```sh
-tim@localhost:~/Downloads/gitfuse$ ./gitfuse.js 
+```
+> gitfuse
 
 Mount a git repo as a file system
 
