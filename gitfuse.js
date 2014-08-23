@@ -34,7 +34,7 @@ var argv = optimist
   })
   .check(function (args) {
     if (!(args.g || args.p)) {
-      throw "Path or github required.";
+      throw "Either path or github required.";
     }
     if (!args.m) {
       throw "Mount path required";

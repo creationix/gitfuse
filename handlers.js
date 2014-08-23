@@ -1,3 +1,4 @@
+
 var modes = require('js-git/lib/modes');
 
 var fakeStats = {
@@ -24,6 +25,9 @@ module.exports = function(repo, argv) {
 
   var lengthCache = {};
 
+  var files = {};
+  var nextFd = 1;
+
   return {
     init: init,
     statfs: statfs,
@@ -31,15 +35,15 @@ module.exports = function(repo, argv) {
     readdir: readdir,
     open: open,
     read: read,
-    write: write,
+    // write: write,
     release: release,
-    create: create,
-    unlink: unlink,
-    rename: rename,
-    mkdir: mkdir,
-    rmdir: rmdir,
-    destroy: destroy,
-    setxattr: setxattr,
+    // create: create,
+    // unlink: unlink,
+    // rename: rename,
+    // mkdir: mkdir,
+    // rmdir: rmdir,
+    // destroy: destroy,
+    // setxattr: setxattr,
   };
 
   function init(callback) {
@@ -71,6 +75,12 @@ module.exports = function(repo, argv) {
     }
   }
 
+  /*
+   * Handler for the getattr() system call.
+   * path: the path to the file
+   * cb: a callback of the form cb(err, stat), where err is the Posix return code
+   *     and stat is the result in the form of a stat structure (when err === 0)
+   */
   function getattr(path, callback) {
 
     repo.pathToEntry(treeHash, path, onEntry);
@@ -111,6 +121,12 @@ module.exports = function(repo, argv) {
     }
   }
 
+  /*
+   * Handler for the readdir() system call.
+   * path: the path to the file
+   * cb: a callback of the form cb(err, names), where err is the Posix return code
+   *     and names is the result in the form of an array of file names (when err === 0).
+   */
   function readdir(path, callback) {
     repo.pathToEntry(treeHash, path, onEntry);
 
@@ -131,45 +147,93 @@ module.exports = function(repo, argv) {
     }
   }
 
+  /*
+   * Handler for the open() system call.
+   * path: the path to the file
+   * flags: requested access flags as documented in open(2)
+   * cb: a callback of the form cb(err, [fh]), where err is the Posix return code
+   *     and fh is an optional numerical file handle, which is passed to subsequent
+   *     read(), write(), and release() calls.
+   */
   function open(path, flags, callback) {
     console.log("OPEN", path);
+    var file;
     repo.pathToEntry(treeHash, path, onEntry);
 
     function onEntry(err, entry) {
       if (err) return callback(-1);
       if (!entry || !entry.mode) return callback(-ENOENT);
-      return callback(0);
-    }
-  }
-
-  function read(path, offset, len, buf, fd, callback) {
-    console.log("READ", path, offset, len);
-    repo.pathToEntry(treeHash, path, onEntry);
-
-    function onEntry(err, entry) {
-      if (err) return callback(-1);
-      if (!entry || !entry.mode) return callback(-ENOENT);
-      if (!modes.isBlob(entry.mode)) return callback(-EINVAL);
+      file = {
+        path: path,
+        mode: entry.mode,
+        hash: entry.hash,
+        blob: null,
+      };
       repo.loadAs("blob", entry.hash, onBlob);
     }
 
     function onBlob(err, blob) {
-      if (err) return callback(-1);
-      var length = Math.max(len, blob.length);
-      blob.copy(buf, 0, offset, length);
-      callback(length);
+      if (!blob) return callback(-1);
+      var fd = nextFd++;
+      files[fd] = file;
+      file.blob = blob;
+      return callback(0, fd);
     }
   }
 
+  /*
+   * Handler for the read() system call.
+   * path: the path to the file
+   * offset: the file offset to read from
+   * len: the number of bytes to read
+   * buf: the Buffer to write the data to
+   * fh:  the optional file handle originally returned by open(), or 0 if it wasn't
+   * cb: a callback of the form cb(err), where err is the Posix return code.
+   *     A positive value represents the number of bytes actually read.
+   */
+  function read(path, offset, len, buf, fd, callback) {
+    var file = files[fd];
+    if (!file) return -EINVAL;
+    var blob = file.blob;
+    var length = Math.max(len, blob.length);
+    blob.copy(buf, 0, offset, length);
+    callback(length);
+  }
+
+  /*
+   * Handler for the write() system call.
+   * path: the path to the file
+   * offset: the file offset to write to
+   * len: the number of bytes to write
+   * buf: the Buffer to read data from
+   * fh:  the optional file handle originally returned by open(), or 0 if it wasn't
+   * cb: a callback of the form cb(err), where err is the Posix return code.
+   *     A positive value represents the number of bytes actually written.
+   */
   function write() {
     console.log("TODO: Implement write", arguments);
   }
 
+  /*
+   * Handler for the release() system call.
+   * path: the path to the file
+   * fh:  the optional file handle originally returned by open(), or 0 if it wasn't
+   * cb: a callback of the form cb(err), where err is the Posix return code.
+   */
   function release(path, fd, callback) {
+    delete files[fd];
     callback(0);
   }
 
-  function create() {
+  /*
+   * Handler for the create() system call.
+   * path: the path of the new file
+   * mode: the desired permissions of the new file
+   * cb: a callback of the form cb(err, [fh]), where err is the Posix return code
+   *     and fh is an optional numerical file handle, which is passed to subsequent
+   *     read(), write(), and release() calls (it's set to 0 if fh is unspecified)
+   */
+  function create(path, mode, callback) {
     console.log("TODO: Implement create", arguments);
   }
 
